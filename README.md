@@ -614,10 +614,11 @@ You should see different suffixes appear. If "the" is followed by "cat" twice an
 This is the easiest function – just two lines! See Function 4 above.
 
 ### Test:
-
+```cpp
 for (int i = 0; i < 5; i++) {
-std::cout << getRandomPrefix(prefixes, chainSize) << std::endl;
+   std::cout << getRandomPrefix(prefixes, chainSize) << std::endl;
 }
+```
 You should see different prefixes each time.
 
 > ✓ Git commit: "Implemented getRandomPrefix"

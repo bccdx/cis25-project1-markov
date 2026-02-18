@@ -41,7 +41,11 @@ int main()
 		cout << getRandomSuffix(prefixes, suffixes, chainSize, "the") << endl;
 	}
 
-	
+	// test getRandomPrefix
+	for (int i = 0; i < 5; i++)
+	{
+		cout << getRandomPrefix(prefixes, chainSize) << endl;
+	}
 
 	return 0;
 }

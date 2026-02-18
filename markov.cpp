@@ -98,7 +98,8 @@ string getRandomSuffix(const string prefixes[], const string suffixes[], int cha
 
 string getRandomPrefix(const string prefixes[], int chainSize)
 {
-	return "";
+	int index = rand() % chainSize;
+	return prefixes[index];
 }
 
 string generateText(const string prefixes[], const string suffixes[], int chainSize, int order, int numWords)
