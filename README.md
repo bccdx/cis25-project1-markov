@@ -307,7 +307,8 @@ Given a prefix like "the cat", this function finds ALL the entries in the chain 
 ### Returns:
 
 A randomly chosen suffix. If the prefix isn't found anywhere, return an empty string "".
-How to implement it:
+
+### How to implement it:
 
 1. First, count how many times currentPrefix appears in the prefixes array.
    Loop through prefixes[0] to prefixes[chainSize-1].
@@ -502,7 +503,7 @@ g++ main.cpp markov.cpp -o markov
 ```
 
 If it prints "Hello" with no errors, you're ready!
-✓ Git commit. Run these commands:
+> ✓ Git commit. Run these commands:
 
 ```
 git status
@@ -521,7 +522,7 @@ In main(), create a small array of words and call joinWords with different param
 std::string testWords[] = {"the", "cat", "sat", "down"};
 std::cout << joinWords(testWords, 0, 2) << std::endl; // Should print: the cat
 std::cout << joinWords(testWords, 1, 3) << std::endl; // Should print: cat sat down
-✓ Git commit: "Implemented joinWords"
+> ✓ Git commit: "Implemented joinWords"
 
 ## Step 3: Implement readWordsFromFile
 
@@ -537,7 +538,7 @@ std::cout << "Read " << count << " words" << std::endl;
 for (int i = 0; i < 10 && i < count; i++) {
 std::cout << words[i] << std::endl;
 }
-✓ Git commit: "Implemented readWordsFromFile"
+> ✓ Git commit: "Implemented readWordsFromFile"
 
 ## Step 4: Implement buildMarkovChain
 
@@ -553,7 +554,7 @@ std::cout << "[" << prefixes[i] << "] -> [" << suffixes[i] << "]" << std::endl;
 }
 Try with order 1 first, then test with order 2. The prefixes should be two words joined with a space.
 
-✓ Git commit: "Implemented buildMarkovChain"
+> ✓ Git commit: "Implemented buildMarkovChain"
 
 ## Step 5: Implement getRandomSuffix
 
@@ -579,7 +580,8 @@ for (int i = 0; i < 5; i++) {
 std::cout << getRandomPrefix(prefixes, chainSize) << std::endl;
 }
 You should see different prefixes each time.
-✓ Git commit: "Implemented getRandomPrefix"
+
+> ✓ Git commit: "Implemented getRandomPrefix"
 
 ## Step 7: Implement generateText
 
@@ -590,24 +592,30 @@ This is the fun one! Follow the implementation guide in Function 5 above.
 std::string output = generateText(prefixes, suffixes, chainSize, 1, 20);
 std::cout << output << std::endl;
 Run it several times – you should get different output each time!
-✓ Git commit: "Implemented generateText"
-Step 8: Complete main()
+
+> ✓ Git commit: "Implemented generateText"
+
+## Step 8: Complete main()
+
 Now put it all together! Your main() should:
 
-8. Add srand(time(0)); at the very beginning (for randomness).
-9. Ask the user for the filename, order, and number of words.
-10. Declare your arrays (make them big – 100000 is good for books).
-11. Call readWordsFromFile.
-12. Call buildMarkovChain.
-13. Call generateText.
-14. Print the result.
-    ✓ Git commit: "Completed main program"
-    Step 9: Test and Polish
+1. Add srand(time(0)); at the very beginning (for randomness).
+2. Ask the user for the filename, order, and number of words.
+3. Declare your arrays (make them big – 100000 is good for books).
+4. Call readWordsFromFile.
+5. Call buildMarkovChain.
+6. Call generateText.
+7. Print the result.
+
+> ✓ Git commit: "Completed main program"
+
+## Step 9: Test and Polish
+
 15. Test with different files. Try downloading a book from Project Gutenberg (gutenberg.org)!
 16. Test with orders 1, 2, and 3. Notice how the output changes.
 17. Add error handling: What if the file doesn't exist? What if the chain is empty?
 
-✓ Git commit: "Final polish"
+> ✓ Git commit: "Final polish"
 
 ### Tips and Hints
 
