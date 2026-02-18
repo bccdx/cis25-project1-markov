@@ -88,6 +88,7 @@ The tradeoff: Lower order = more random. Higher order = more similar to the orig
 Worked Example: Order 1 vs Order 2
 
 Let's see how order affects the chain with a longer text. Consider this training text:
+
 ```
 "I went to the store. I went to the park. I walked to the store. She went to the movies."
 With Order 1 (single-word prefixes):
@@ -100,7 +101,8 @@ Key entries from the chain:
 With order 1, the chain loses important context. Notice that "the" can lead to "store.", "park.", or "movies." – but the chain doesn't remember WHO went or HOW they got there. We might generate:
 ```
 
-### Possible output: 
+### Possible output:
+
 ```
 "She walked to the park. I went to the movies."
 ```
@@ -110,6 +112,7 @@ This is grammatically fine, but notice "She walked to the park" and "I went to t
 ### With Order 2 (two-word prefixes):
 
 Now each prefix is TWO words joined together:
+
 ```
 "I went" → ["to", "to"]
 "went to" → ["the", "the", "the"]
@@ -168,14 +171,25 @@ Your markov.h file must declare the following functions. Put these signatures in
 
 ## Function 1: joinWords (helper)
 
+```cpp
 std::string joinWords(const std::string words[], int startIndex, int count);
-What it does: This helper function takes several words from an array and glues them together into one string with spaces between them. You'll use this to create prefixes when order > 1.
-Parameters explained:
-words[] – The array of words to pull from.
-startIndex – Which position to start from.
-count – How many words to join together.
-Returns: A single string with the words joined by spaces.
-How to implement it:
+```
+
+### What it does:
+
+This helper function takes several words from an array and glues them together into one string with spaces between them. You'll use this to create prefixes when order > 1.
+
+### Parameters explained:
+
+- words[] – The array of words to pull from.
+- startIndex – Which position to start from.
+- count – How many words to join together.
+
+### Returns:
+
+A single string with the words joined by spaces.
+
+### How to implement it:
 
 1. Create an empty result string.
 2. Loop from i = 0 to count - 1:
@@ -190,14 +204,25 @@ How to implement it:
 
 ## Function 2: readWordsFromFile
 
+```cpp
 int readWordsFromFile(std::string filename, std::string words[], int maxWords);
-What it does: This function opens a text file and reads every word from it into an array. Think of it like pouring all the words from a book into a bucket (the array).
-Parameters explained:
-filename – The name of the file to read (like "alice.txt").
-words[] – An empty array that you will fill with words from the file.
-maxWords – The maximum number of words the array can hold. Stop reading if you hit this limit.
-Returns: The number of words you actually read. If the file couldn't be opened, return -1.
-How to implement it:
+```
+
+### What it does:
+
+This function opens a text file and reads every word from it into an array. Think of it like pouring all the words from a book into a bucket (the array).
+
+### Parameters explained:
+
+- filename – The name of the file to read (like "alice.txt").
+- words[] – An empty array that you will fill with words from the file.
+- maxWords – The maximum number of words the array can hold. Stop reading if you hit this limit.
+
+### Returns:
+
+The number of words you actually read. If the file couldn't be opened, return -1.
+
+### How to implement it:
 
 4. Create an ifstream object and open the file.
 5. Check if the file opened. If not, return -1.
@@ -210,20 +235,28 @@ How to implement it:
 
 ## Function 3: buildMarkovChain
 
-    int buildMarkovChain(const std::string words[], int numWords, int order,
-    std::string prefixes[], std::string suffixes[],
-    int maxChainSize);
-    What it does: This function scans through all the words and records "what comes after what." It's like making flashcards: on the front of each card you write a word (or words), and on the back you write the word that came after it.
-    Parameters explained:
-    words[] – The array of words you read from the file (from Function 1).
-    numWords – How many words are in that array.
-    order – How many words to use as the prefix. Order 1 means one word, order 2 means two words joined together.
-    prefixes[] – An empty array where you'll store the "front of the flashcard" (the word or words before).
-    suffixes[] – An empty array where you'll store the "back of the flashcard" (the word that came after).
-    maxChainSize – Maximum number of entries the arrays can hold.
-    Returns: The number of prefix-suffix pairs you added.
-    Important: You WILL have duplicates, and that's good! If "the" is followed by "cat" twice and "dog" once, you'll have three entries. This is how we track probability.
-    How to implement it:
+```cpp
+int buildMarkovChain(const std::string words[], int numWords, int order, std::string prefixes[], std::string suffixes[], int maxChainSize);
+```
+
+### What it does:
+
+This function scans through all the words and records "what comes after what." It's like making flashcards: on the front of each card you write a word (or words), and on the back you write the word that came after it.
+
+### Parameters explained:
+
+- words[] – The array of words you read from the file (from Function 1).
+- numWords – How many words are in that array.order – How many words to use as the prefix. Order 1 means one word, order 2 means two words joined together.prefixes[] – An empty array where you'll store the "front of the flashcard" (the word or words before).
+- suffixes[] – An empty array where you'll store the "back of the flashcard" (the word that came after).
+- maxChainSize – Maximum number of entries the arrays can hold.
+
+### Returns:
+
+The number of prefix-suffix pairs you added.
+
+> Important: You WILL have duplicates, and that's good! If "the" is followed by "cat" twice and "dog" once, you'll have three entries. This is how we track probability.
+
+### How to implement it:
 
 11. Create a counter variable called count, set it to 0.
 12. Loop with i from 0 to (numWords - order - 1). Why? Because we need
@@ -246,16 +279,25 @@ How to implement it:
 
 ## Function 4: getRandomSuffix
 
-    std::string getRandomSuffix(const std::string prefixes[], const std::string suffixes[],
-    int chainSize, std::string currentPrefix);
-    What it does: Given a prefix like "the cat", this function finds ALL the entries in the chain that have that prefix, then randomly picks one of the corresponding suffixes. It's like flipping through your flashcards, finding all the ones with "the cat" on the front, and randomly picking one to see what's on the back.
-    Parameters explained:
-    prefixes[] – The array of prefixes from buildMarkovChain.
-    suffixes[] – The array of suffixes from buildMarkovChain.
-    chainSize – How many entries are in the chain.
-    currentPrefix – The prefix to look up (like "the" or "the cat").
-    Returns: A randomly chosen suffix. If the prefix isn't found anywhere, return an empty string "".
-    How to implement it:
+```cpp
+std::string getRandomSuffix(const std::string prefixes[], const std::string suffixes[], int chainSize, std::string currentPrefix);
+```
+
+### What it does:
+
+Given a prefix like "the cat", this function finds ALL the entries in the chain that have that prefix, then randomly picks one of the corresponding suffixes. It's like flipping through your flashcards, finding all the ones with "the cat" on the front, and randomly picking one to see what's on the back.
+
+### Parameters explained:
+
+- prefixes[] – The array of prefixes from buildMarkovChain.
+- suffixes[] – The array of suffixes from buildMarkovChain.
+- chainSize – How many entries are in the chain.
+- currentPrefix – The prefix to look up (like "the" or "the cat").
+
+### Returns:
+
+A randomly chosen suffix. If the prefix isn't found anywhere, return an empty string "".
+How to implement it:
 
 15. First, count how many times currentPrefix appears in the prefixes array.
     Loop through prefixes[0] to prefixes[chainSize-1].
@@ -276,7 +318,9 @@ How to implement it:
 
 ## Function 5: getRandomPrefix
 
+```cpp
 std::string getRandomPrefix(const std::string prefixes[], int chainSize);
+```
 
 ### What it does:
 
@@ -284,11 +328,12 @@ This function just picks a random prefix from your chain to use as the starting 
 
 ### Parameters explained:
 
-prefixes[] – The array of prefixes.
+- prefixes[] – The array of prefixes.
+- chainSize – How many entries are in the chain.
 
-chainSize – How many entries are in the chain.
+### Returns:
 
-Returns: A randomly selected prefix string.
+A randomly selected prefix string.
 
 ### How to implement it:
 
@@ -298,23 +343,26 @@ Returns: A randomly selected prefix string.
 
 ## Function 6: generateText
 
+```cpp
 std::string generateText(const std::string prefixes[], const std::string suffixes[],
 int chainSize, int order, int numWords);
-What it does: This is the fun one! It "walks" the Markov chain to generate new text. It picks a random starting point, then keeps asking "what word comes next?" over and over, building up a sentence word by word.
+```
+
+### What it does:
+
+This is the fun one! It "walks" the Markov chain to generate new text. It picks a random starting point, then keeps asking "what word comes next?" over and over, building up a sentence word by word.
 
 ### Parameters explained:
 
-prefixes[] – The array of prefixes.
+- prefixes[] – The array of prefixes.
+- suffixes[] – The array of suffixes.
+- chainSize – How many entries are in the chain.
+- order – The chain order (1, 2, or 3). You need this to know how to update the prefix.
+- numWords – How many words to generate.
 
-suffixes[] – The array of suffixes.
+### Returns:
 
-chainSize – How many entries are in the chain.
-
-order – The chain order (1, 2, or 3). You need this to know how to update the prefix.
-
-numWords – How many words to generate.
-
-Returns: A string containing all the generated text.
+A string containing all the generated text.
 
 ### How to implement it:
 
