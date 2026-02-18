@@ -578,11 +578,15 @@ This is the trickiest function. Follow the implementation guide in Function 2 ab
 ### Test:
 
 Build a chain and print the first 20 pairs to see if they look right:
+
+```cpp
 std::string prefixes[10000], suffixes[10000];
 int chainSize = buildMarkovChain(words, count, 1, prefixes, suffixes, 10000);
 for (int i = 0; i < 20 && i < chainSize; i++) {
 std::cout << "[" << prefixes[i] << "] -> [" << suffixes[i] << "]" << std::endl;
 }
+```
+
 Try with order 1 first, then test with order 2. The prefixes should be two words joined with a space.
 
 > ✓ Git commit: "Implemented buildMarkovChain"
