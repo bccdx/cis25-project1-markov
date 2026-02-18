@@ -529,7 +529,7 @@ std::cout << joinWords(testWords, 1, 3) << std::endl; // Should print: cat sat d
 Follow the implementation guide in Function 1 above.
 NOTE: If your ifstream object is called inputFile, you can use inputFile.is_open() to get a bool that will be true if the file is open and false if not
 
-### Test:
+### Test
 
 Create a small test file (like "test.txt") with a few sentences. Then in main():
 std::string words[1000];
