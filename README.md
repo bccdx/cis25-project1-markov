@@ -88,6 +88,7 @@ The tradeoff: Lower order = more random. Higher order = more similar to the orig
 Worked Example: Order 1 vs Order 2
 
 Let's see how order affects the chain with a longer text. Consider this training text:
+```
 "I went to the store. I went to the park. I walked to the store. She went to the movies."
 With Order 1 (single-word prefixes):
 Key entries from the chain:
@@ -97,12 +98,19 @@ Key entries from the chain:
 "the" → ["store.", "park.", "store.", "movies."]
 "walked" → ["to"]
 With order 1, the chain loses important context. Notice that "the" can lead to "store.", "park.", or "movies." – but the chain doesn't remember WHO went or HOW they got there. We might generate:
+```
 
-Possible output: "She walked to the park. I went to the movies."
+### Possible output: 
+```
+"She walked to the park. I went to the movies."
+```
+
 This is grammatically fine, but notice "She walked to the park" and "I went to the movies" never appeared in the original! The chain mixes and matches freely because it only looks at one word at a time.
 
-With Order 2 (two-word prefixes):
+### With Order 2 (two-word prefixes):
+
 Now each prefix is TWO words joined together:
+```
 "I went" → ["to", "to"]
 "went to" → ["the", "the", "the"]
 "to the" → ["store.", "park.", "store.", "movies."]
@@ -111,6 +119,7 @@ Now each prefix is TWO words joined together:
 "She went" → ["to"]
 "the store." → ["I", "She"]
 "the park." → ["I"]
+```
 
 Now the chain remembers more context. "I went" leads to "to", and "She went" also leads to "to" – they're tracked separately even though they both contain "went". The phrase "to the" can still lead to multiple places, giving us variety, but only in combinations that appeared in the original.
 
@@ -265,15 +274,23 @@ How to implement it:
 - pick = rand() % 3 might give us 0, 1, or 2
 - We return suffixes[0], suffixes[2], or suffixes[3] → "cat", "dog", or "bird"
 
-  ## Function 5: getRandomPrefix
+## Function 5: getRandomPrefix
 
-  std::string getRandomPrefix(const std::string prefixes[], int chainSize);
-  What it does: This function just picks a random prefix from your chain to use as the starting point for text generation. It's like closing your eyes and pointing at a random flashcard to start with.
-  Parameters explained:
-  prefixes[] – The array of prefixes.
-  chainSize – How many entries are in the chain.
-  Returns: A randomly selected prefix string.
-  How to implement it:
+std::string getRandomPrefix(const std::string prefixes[], int chainSize);
+
+### What it does:
+
+This function just picks a random prefix from your chain to use as the starting point for text generation. It's like closing your eyes and pointing at a random flashcard to start with.
+
+### Parameters explained:
+
+prefixes[] – The array of prefixes.
+
+chainSize – How many entries are in the chain.
+
+Returns: A randomly selected prefix string.
+
+### How to implement it:
 
 1. Generate a random index: int index = rand() % chainSize;
 2. Return prefixes[index];
@@ -284,23 +301,43 @@ How to implement it:
 std::string generateText(const std::string prefixes[], const std::string suffixes[],
 int chainSize, int order, int numWords);
 What it does: This is the fun one! It "walks" the Markov chain to generate new text. It picks a random starting point, then keeps asking "what word comes next?" over and over, building up a sentence word by word.
-Parameters explained:
+
+### Parameters explained:
+
 prefixes[] – The array of prefixes.
+
 suffixes[] – The array of suffixes.
+
 chainSize – How many entries are in the chain.
+
 order – The chain order (1, 2, or 3). You need this to know how to update the prefix.
+
 numWords – How many words to generate.
+
 Returns: A string containing all the generated text.
-How to implement it: 3. Call getRandomPrefix to get a starting prefix. 4. Start your result string with this prefix. 5. Store the current prefix in a variable (you'll update this each step). 6. Loop numWords times:
-a. Call getRandomSuffix with your current prefix.
-b. If it returns "" (empty), break out of the loop (dead end).
-c. Add a space and the new word to your result string.
-d. Update currentPrefix (see below). 7. Return the result string.
-How to update the prefix:
+
+### How to implement it:
+
+3. Call getRandomPrefix to get a starting prefix.
+4. Start your result string with this prefix.
+5. Store the current prefix in a variable (you'll update this each step). 6. Loop numWords times:
+
+   - Call getRandomSuffix with your current prefix.
+   - If it returns "" (empty), break out of the loop (dead end).
+   - Add a space and the new word to your result string.
+   - Update currentPrefix (see below). 7. Return the result string.
+
+### How to update the prefix:
+
 For order 1: The new prefix is just the new word. Easy!
+
 currentPrefix = newWord;
+
 For order 2 or 3: You need to drop the first word and add the new word. The easiest way is to keep an array of the last N words, update it each step, then use joinWords to rebuild the prefix string.
-Example walkthrough (order 1):
+
+### Example walkthrough (order 1):
+
+```
 Starting prefix: "The"
 result = "The"
 Loop iteration 1: getRandomSuffix("The") returns "cat"
@@ -308,6 +345,7 @@ result = "The cat", currentPrefix = "cat"
 Loop iteration 2: getRandomSuffix("cat") returns "sat"
 result = "The cat sat", currentPrefix = "sat"
 ...and so on until you've generated numWords words.
+```
 
 ## Git Commands Reference
 
@@ -437,9 +475,13 @@ for (int i = 0; i < 10 && i < count; i++) {
 std::cout << words[i] << std::endl;
 }
 ✓ Git commit: "Implemented readWordsFromFile"
-Step 4: Implement buildMarkovChain
+
+## Step 4: Implement buildMarkovChain
+
 This is the trickiest function. Follow the implementation guide in Function 2 above carefully!
-Test:
+
+### Test:
+
 Build a chain and print the first 20 pairs to see if they look right:
 std::string prefixes[10000], suffixes[10000];
 int chainSize = buildMarkovChain(words, count, 1, prefixes, suffixes, 10000);
@@ -447,27 +489,41 @@ for (int i = 0; i < 20 && i < chainSize; i++) {
 std::cout << "[" << prefixes[i] << "] -> [" << suffixes[i] << "]" << std::endl;
 }
 Try with order 1 first, then test with order 2. The prefixes should be two words joined with a space.
+
 ✓ Git commit: "Implemented buildMarkovChain"
-Step 5: Implement getRandomSuffix
+
+## Step 5: Implement getRandomSuffix
+
 Follow the implementation guide in Function 3 above.
-Test:
+
+### Test:
+
 Pick a prefix you saw in your chain printout. Call getRandomSuffix 10 times:
 for (int i = 0; i < 10; i++) {
 std::cout << getRandomSuffix(prefixes, suffixes, chainSize, "the") << std::endl;
 }
 You should see different suffixes appear. If "the" is followed by "cat" twice and "dog" once in your text, you should see "cat" roughly twice as often as "dog".
+
 ✓ Git commit: "Implemented getRandomSuffix"
-Step 6: Implement getRandomPrefix
+
+## Step 6: Implement getRandomPrefix
+
 This is the easiest function – just two lines! See Function 4 above.
-Test:
+
+### Test:
+
 for (int i = 0; i < 5; i++) {
 std::cout << getRandomPrefix(prefixes, chainSize) << std::endl;
 }
 You should see different prefixes each time.
 ✓ Git commit: "Implemented getRandomPrefix"
-Step 7: Implement generateText
+
+## Step 7: Implement generateText
+
 This is the fun one! Follow the implementation guide in Function 5 above.
-Test:
+
+### Test:
+
 std::string output = generateText(prefixes, suffixes, chainSize, 1, 20);
 std::cout << output << std::endl;
 Run it several times – you should get different output each time!
@@ -487,18 +543,36 @@ Now put it all together! Your main() should:
 15. Test with different files. Try downloading a book from Project Gutenberg (gutenberg.org)!
 16. Test with orders 1, 2, and 3. Notice how the output changes.
 17. Add error handling: What if the file doesn't exist? What if the chain is empty?
-    ✓ Git commit: "Final polish"
-    Tips and Hints
-    Array sizes: Use large arrays. A typical book has 50,000-100,000 words. Declare arrays like: std::string words[100000]; and std::string prefixes[100000];
-    Random numbers: Include <cstdlib> and <ctime>. Call srand(time(0)) once at the start of main(). Use rand() % n to get a random number from 0 to n-1.
-    String comparison: You can compare strings directly with ==. For example: if (prefixes[i] == currentPrefix)
-    Updating the prefix: For order 2+, the trickiest part is updating the prefix. One approach: keep an array of the last N words (where N = order), and use joinWords to rebuild the prefix string after each step.
-    Sample Program Output
-    Enter input filename: alice.txt
-    Enter order (1, 2, or 3): 2
-    Enter number of words to generate: 30
 
-## Generated text:
+✓ Git commit: "Final polish"
+
+### Tips and Hints
+
+#### Array sizes:
+
+Use large arrays. A typical book has 50,000-100,000 words. Declare arrays like: std::string words[100000]; and std::string prefixes[100000];
+
+#### Random numbers:
+
+Include <cstdlib> and <ctime>. Call srand(time(0)) once at the start of main(). Use rand() % n to get a random number from 0 to n-1.
+
+#### String comparison:
+
+You can compare strings directly with ==. For example: if (prefixes[i] == currentPrefix)
+
+#### Updating the prefix:
+
+For order 2+, the trickiest part is updating the prefix. One approach: keep an array of the last N words (where N = order), and use joinWords to rebuild the prefix string after each step.
+
+### Sample Program Output
+
+```
+Enter input filename: alice.txt
+Enter order (1, 2, or 3): 2
+Enter number of words to generate: 30
+```
+
+#### Generated text:
 
 The Queen said to Alice in a great hurry to change the subject of conversation. Are you fond of cats said the Caterpillar sternly. Explain yourself!
 
