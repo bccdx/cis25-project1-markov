@@ -64,28 +64,40 @@ To generate new text, we "walk" the chain:
 ### Possible generated output: "The cat saw the dog. The cat sat down."
 
 This exact sentence was never in our original text, but it sounds like it could have been! The Markov chain captured the "flavor" and vocabulary of the original while creating something new.
-Understanding the "Order" Parameter
+
+### Understanding the "Order" Parameter
+
 The order (also called "prefix length" or "state size") controls how many words the chain looks at when predicting the next word.
 
-Order 1:
+### Order 1:
+
 The chain looks at only the previous 1 word to decide what comes next.
 Example: If the current word is "the", we look up all words that ever followed "the" in our training text.
 Result: More random and chaotic output. Grammatically awkward but very "creative."
 
-Order 2:
+### Order 2:
+
 The chain looks at the previous 2 words together.
 Example: If the current words are "the cat", we look up all words that ever followed "the cat" together.
 Result: Good balance of novelty and coherence. This is the most commonly used order.
 
-Order 3 or higher:
+### Order 3 or higher:
+
 The chain looks at 3+ previous words.
 
-Example: If the current words are "the cat sat", we look up what followed that exact phrase.
+### Example:
 
-Result: Very coherent output, but often just reproduces chunks of the original text verbatim.
-The tradeoff: Lower order = more random. Higher order = more similar to the original. For this project, your program should support orders 1, 2, and 3.
+If the current words are "the cat sat", we look up what followed that exact phrase.
 
-Worked Example: Order 1 vs Order 2
+### Result:
+
+Very coherent output, but often just reproduces chunks of the original text verbatim.
+
+### The tradeoff:
+
+Lower order = more random. Higher order = more similar to the original. For this project, your program should support orders 1, 2, and 3.
+
+### Worked Example: Order 1 vs Order 2
 
 Let's see how order affects the chain with a longer text. Consider this training text:
 
@@ -126,11 +138,19 @@ Now each prefix is TWO words joined together:
 
 Now the chain remembers more context. "I went" leads to "to", and "She went" also leads to "to" – they're tracked separately even though they both contain "went". The phrase "to the" can still lead to multiple places, giving us variety, but only in combinations that appeared in the original.
 
-Possible output: "I went to the park. I walked to the store. She went to the movies."
-This output rearranges the original sentences but doesn't create impossible combinations like "She walked" (which never appeared). Order 2 preserves more of the original structure while still allowing creative recombination.
-The key insight: Higher order = more context = more coherent but less creative. Lower order = less context = more creative but potentially nonsensical. For most text, order 2 hits a sweet spot.
+### Possible output:
 
-What is a Header File?
+```
+"I went to the park. I walked to the store. She went to the movies."
+```
+
+This output rearranges the original sentences but doesn't create impossible combinations like "She walked" (which never appeared). Order 2 preserves more of the original structure while still allowing creative recombination.
+
+#### The key insight:
+
+Higher order = more context = more coherent but less creative. Lower order = less context = more creative but potentially nonsensical. For most text, order 2 hits a sweet spot.
+
+### What is a Header File?
 
 A header file (ending in .h) is a file that contains declarations – it tells the compiler "these functions exist" without providing the actual code. Think of it as a menu at a restaurant: it lists what's available, but doesn't include the recipes.
 When you write a program across multiple .cpp files, the compiler processes each file separately. If main.cpp wants to call a function defined in markov.cpp, the compiler needs to know that function exists – what it's called, what parameters it takes, and what it returns. The header file provides this information.
@@ -138,20 +158,21 @@ What are Include Guards?
 
 Sometimes a header file might accidentally get included more than once (for example, if file A includes file B, and file B includes file C, and file C includes file A again). This can cause errors because the compiler sees the same declarations twice.
 Include guards prevent this problem. They're a pattern that looks like this:
+
+```cpp
 #ifndef MARKOV_H
 #define MARKOV_H
 
 // Your declarations go here
 
 #endif
+```
 
-Here's how it works:
+### Here's how it works:
 
-#ifndef MARKOV_H means "if MARKOV_H is NOT defined, continue."
-
-#define MARKOV_H defines MARKOV_H so it now exists.
-
-#endif marks the end of the conditional section.
+- #ifndef MARKOV_H means "if MARKOV_H is NOT defined, continue."
+- #define MARKOV_H defines MARKOV_H so it now exists.
+- #endif marks the end of the conditional section.
 
 The first time the header is included, MARKOV_H isn't defined, so the compiler processes everything between #ifndef and #endif. It also defines MARKOV_H. If the header gets included again, MARKOV_H is already defined, so the compiler skips everything – preventing duplicate declarations.
 
@@ -503,6 +524,7 @@ g++ main.cpp markov.cpp -o markov
 ```
 
 If it prints "Hello" with no errors, you're ready!
+
 > ✓ Git commit. Run these commands:
 
 ```
@@ -519,25 +541,34 @@ Start with this easy helper function. Follow the implementation guide in Functio
 ### Test:
 
 In main(), create a small array of words and call joinWords with different parameters:
+
+```cpp
 std::string testWords[] = {"the", "cat", "sat", "down"};
 std::cout << joinWords(testWords, 0, 2) << std::endl; // Should print: the cat
 std::cout << joinWords(testWords, 1, 3) << std::endl; // Should print: cat sat down
+```
+
 > ✓ Git commit: "Implemented joinWords"
 
 ## Step 3: Implement readWordsFromFile
 
 Follow the implementation guide in Function 1 above.
-NOTE: If your ifstream object is called inputFile, you can use inputFile.is_open() to get a bool that will be true if the file is open and false if not
+
+> NOTE: If your ifstream object is called inputFile, you can use inputFile.is_open() to get a bool that will be true if the file is open and false if not
 
 ### Test
 
 Create a small test file (like "test.txt") with a few sentences. Then in main():
+
+```cpp
 std::string words[1000];
 int count = readWordsFromFile("test.txt", words, 1000);
 std::cout << "Read " << count << " words" << std::endl;
 for (int i = 0; i < 10 && i < count; i++) {
-std::cout << words[i] << std::endl;
+	std::cout << words[i] << std::endl;
 }
+```
+
 > ✓ Git commit: "Implemented readWordsFromFile"
 
 ## Step 4: Implement buildMarkovChain

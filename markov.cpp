@@ -20,7 +20,25 @@ string joinWords(const string words[], int startIndex, int count)
 
 int readWordsFromFile(string filename, string words[], int maxWords)
 {
-	return 0;
+	ifstream inputFile(filename);
+
+	if (!inputFile.is_open())
+	{
+		cerr << "Error: File not opened!" << endl;
+		return -1;
+	}
+
+	int counter = 0;
+
+
+	while (counter < maxWords && inputFile >> words[counter])
+	{
+		counter++;
+	}
+
+	inputFile.close();
+
+	return counter;
 }
 
 int buildMarkovChain(const string words[], int numWords, int order, string prefixes[], string suffixes[], int maxChainSize)
