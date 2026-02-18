@@ -614,11 +614,13 @@ You should see different suffixes appear. If "the" is followed by "cat" twice an
 This is the easiest function – just two lines! See Function 4 above.
 
 ### Test:
+
 ```cpp
 for (int i = 0; i < 5; i++) {
    std::cout << getRandomPrefix(prefixes, chainSize) << std::endl;
 }
 ```
+
 You should see different prefixes each time.
 
 > ✓ Git commit: "Implemented getRandomPrefix"
@@ -629,8 +631,11 @@ This is the fun one! Follow the implementation guide in Function 5 above.
 
 ### Test:
 
+```cpp
 std::string output = generateText(prefixes, suffixes, chainSize, 1, 20);
 std::cout << output << std::endl;
+```
+
 Run it several times – you should get different output each time!
 
 > ✓ Git commit: "Implemented generateText"
@@ -678,9 +683,11 @@ For order 2+, the trickiest part is updating the prefix. One approach: keep an a
 ### Sample Program Output
 
 ```
+
 Enter input filename: alice.txt
 Enter order (1, 2, or 3): 2
 Enter number of words to generate: 30
+
 ```
 
 #### Generated text:
@@ -710,3 +717,7 @@ When you have completed the project:
 4. Go to Canvas and find this assignment.
 5. Paste the link to your repository and submit.
    Important: Make sure your repository is not set to private, or I won't be able to see your code!
+
+```
+
+```

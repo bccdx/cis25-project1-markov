@@ -104,5 +104,31 @@ string getRandomPrefix(const string prefixes[], int chainSize)
 
 string generateText(const string prefixes[], const string suffixes[], int chainSize, int order, int numWords)
 {
-	return "";
+	string startingPrefix = getRandomPrefix(prefixes, chainSize);
+	string resultString = startingPrefix;
+	string currentPrefix = startingPrefix;
+	string lastWords[order];
+
+	for (int i = 0; i < numWords; i++)
+	{
+		string word = getRandomSuffix(prefixes, suffixes, chainSize, currentPrefix);
+		if (word == "")
+		{
+			break;
+		}
+		resultString += " " + word;
+
+		// currentPrefix = word;
+		for (int i = 0; i < (order - 1); i++)
+		{
+			lastWords[i] = lastWords[i + 1];
+		}
+		lastWords[order - 1] = word;
+
+		cout << "HERE " << joinWords(lastWords, 0, order) << endl;
+
+		currentPrefix = joinWords(lastWords, 0, order);
+	}
+
+	return resultString;
 }

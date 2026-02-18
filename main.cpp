@@ -27,6 +27,7 @@ int main()
 	{
 		cout << "[" << prefixes[i] << "] -> [" << suffixes[i] << "]" << endl;
 	}
+	cout << chainSize << endl;
 
 	string prefixes2[10000], suffixes2[10000];
 	int chainSize2 = buildMarkovChain(words, count, 2, prefixes2, suffixes2, 10000);
@@ -46,6 +47,10 @@ int main()
 	{
 		cout << getRandomPrefix(prefixes, chainSize) << endl;
 	}
+
+	// test generateText
+	string output = generateText(prefixes, suffixes, chainSize, 6, 20);
+	cout << output << endl;
 
 	return 0;
 }
