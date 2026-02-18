@@ -598,9 +598,13 @@ Follow the implementation guide in Function 3 above.
 ### Test:
 
 Pick a prefix you saw in your chain printout. Call getRandomSuffix 10 times:
+
+```cpp
 for (int i = 0; i < 10; i++) {
-std::cout << getRandomSuffix(prefixes, suffixes, chainSize, "the") << std::endl;
+   std::cout << getRandomSuffix(prefixes, suffixes, chainSize, "the") << std::endl;
 }
+```
+
 You should see different suffixes appear. If "the" is followed by "cat" twice and "dog" once in your text, you should see "cat" roughly twice as often as "dog".
 
 ✓ Git commit: "Implemented getRandomSuffix"
