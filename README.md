@@ -196,11 +196,15 @@ A single string with the words joined by spaces.
    - Add words[startIndex + i] to result
    - If this isn't the last word, also add a space
 3. Return result.
-   Example:
-   If words = ["the", "cat", "sat", "down"]
-   joinWords(words, 0, 2) returns "the cat"
-   joinWords(words, 1, 2) returns "cat sat"
-   joinWords(words, 1, 3) returns "cat sat down"
+
+### Example:
+
+```
+If words = ["the", "cat", "sat", "down"]
+joinWords(words, 0, 2) returns "the cat"
+joinWords(words, 1, 2) returns "cat sat"
+joinWords(words, 1, 3) returns "cat sat down"
+```
 
 ## Function 2: readWordsFromFile
 
@@ -224,14 +228,14 @@ The number of words you actually read. If the file couldn't be opened, return -1
 
 ### How to implement it:
 
-4. Create an ifstream object and open the file.
-5. Check if the file opened. If not, return -1.
-   2a. If your ifstream object is called inputFile, you can use inputFile.is_open() to get a bool that will be true if the file is open and false if not
-6. Create a counter variable, set it to 0.
-7. Use a while loop: while (counter < maxWords && inFile >> words[counter])
-8. Inside the loop, just increment the counter.
-9. After the loop, close the file.
-10. Return the counter.
+1. Create an ifstream object and open the file.
+2. Check if the file opened. If not, return -1.
+   - If your ifstream object is called inputFile, you can use inputFile.is_open() to get a bool that will be true if the file is open and false if not
+3. Create a counter variable, set it to 0.
+4. Use a while loop: while (counter < maxWords && inFile >> words[counter])
+5. Inside the loop, just increment the counter.
+6. After the loop, close the file.
+7. Return the counter.
 
 ## Function 3: buildMarkovChain
 
@@ -246,7 +250,9 @@ This function scans through all the words and records "what comes after what." I
 ### Parameters explained:
 
 - words[] – The array of words you read from the file (from Function 1).
-- numWords – How many words are in that array.order – How many words to use as the prefix. Order 1 means one word, order 2 means two words joined together.prefixes[] – An empty array where you'll store the "front of the flashcard" (the word or words before).
+- numWords – How many words are in that array.
+- order – How many words to use as the prefix. Order 1 means one word, order 2 means two words joined together.
+- prefixes[] – An empty array where you'll store the "front of the flashcard" (the word or words before).
 - suffixes[] – An empty array where you'll store the "back of the flashcard" (the word that came after).
 - maxChainSize – Maximum number of entries the arrays can hold.
 
@@ -258,24 +264,28 @@ The number of prefix-suffix pairs you added.
 
 ### How to implement it:
 
-11. Create a counter variable called count, set it to 0.
-12. Loop with i from 0 to (numWords - order - 1). Why? Because we need
-    'order' words for the prefix PLUS one more word for the suffix.
-13. Inside the loop:
-    - Create the prefix by calling joinWords(words, i, order)
-    - The suffix is simply words[i + order]
-    - Store: prefixes[count] = prefix; suffixes[count] = suffix;
-    - Increment count
-    - If count reaches maxChainSize, break out of the loop
-14. Return count.
-    Example with order = 1:
-    If words = ["the", "cat", "sat"], then:
-    i=0: prefix = "the", suffix = "cat"
-    i=1: prefix = "cat", suffix = "sat"
-    Example with order = 2:
-    If words = ["the", "cat", "sat", "down"], then:
-    i=0: prefix = "the cat", suffix = "sat"
-    i=1: prefix = "cat sat", suffix = "down"
+1. Create a counter variable called count, set it to 0.
+2. Loop with i from 0 to (numWords - order - 1). Why? Because we need
+   'order' words for the prefix PLUS one more word for the suffix.
+3. Inside the loop:
+   - Create the prefix by calling joinWords(words, i, order)
+   - The suffix is simply words[i + order]
+   - Store: prefixes[count] = prefix; suffixes[count] = suffix;
+   - Increment count
+   - If count reaches maxChainSize, break out of the loop
+4. Return count.
+
+### Example with order = 1:
+
+```
+If words = ["the", "cat", "sat"], then:
+i=0: prefix = "the", suffix = "cat"
+i=1: prefix = "cat", suffix = "sat"
+Example with order = 2:
+If words = ["the", "cat", "sat", "down"], then:
+i=0: prefix = "the cat", suffix = "sat"
+i=1: prefix = "cat sat", suffix = "down"
+```
 
 ## Function 4: getRandomSuffix
 
@@ -299,18 +309,22 @@ Given a prefix like "the cat", this function finds ALL the entries in the chain 
 A randomly chosen suffix. If the prefix isn't found anywhere, return an empty string "".
 How to implement it:
 
-15. First, count how many times currentPrefix appears in the prefixes array.
-    Loop through prefixes[0] to prefixes[chainSize-1].
-    If prefixes[i] == currentPrefix, increment a matchCount.
-16. If matchCount is 0, return "" (empty string - prefix not found).
-17. Pick a random number: int pick = rand() % matchCount;
-    This gives you a number from 0 to matchCount-1.
-18. Loop through the prefixes array again. Keep a counter for matches.
-    When you find the 'pick'-th match, return the corresponding suffix.
-19. If somehow nothing was found, return "".
-    Example:
-    If prefixes = ["the", "cat", "the", "the"] and suffixes = ["cat", "sat", "dog", "bird"]
-    And we call getRandomSuffix with currentPrefix = "the":
+1. First, count how many times currentPrefix appears in the prefixes array.
+   Loop through prefixes[0] to prefixes[chainSize-1].
+   If prefixes[i] == currentPrefix, increment a matchCount.
+2. If matchCount is 0, return "" (empty string - prefix not found).
+3. Pick a random number: int pick = rand() % matchCount;
+   This gives you a number from 0 to matchCount-1.
+4. Loop through the prefixes array again. Keep a counter for matches.
+   When you find the 'pick'-th match, return the corresponding suffix.
+5. If somehow nothing was found, return "".
+
+### Example:
+
+```
+If prefixes = ["the", "cat", "the", "the"] and suffixes = ["cat", "sat", "dog", "bird"]
+And we call getRandomSuffix with currentPrefix = "the":
+```
 
 - We find "the" at positions 0, 2, 3 → matchCount = 3
 - pick = rand() % 3 might give us 0, 1, or 2
@@ -366,14 +380,15 @@ A string containing all the generated text.
 
 ### How to implement it:
 
-3. Call getRandomPrefix to get a starting prefix.
-4. Start your result string with this prefix.
-5. Store the current prefix in a variable (you'll update this each step). 6. Loop numWords times:
-
+1. Call getRandomPrefix to get a starting prefix.
+2. Start your result string with this prefix.
+3. Store the current prefix in a variable (you'll update this each step).
+4. Loop numWords times:
    - Call getRandomSuffix with your current prefix.
    - If it returns "" (empty), break out of the loop (dead end).
    - Add a space and the new word to your result string.
-   - Update currentPrefix (see below). 7. Return the result string.
+   - Update currentPrefix (see below).
+5. Return the result string.
 
 ### How to update the prefix:
 
