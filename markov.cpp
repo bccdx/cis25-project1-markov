@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <sstream>
 using namespace std;
 
 string joinWords(const string words[], int startIndex, int count)
@@ -108,6 +109,14 @@ string generateText(const string prefixes[], const string suffixes[], int chainS
 	string resultString = startingPrefix;
 	string currentPrefix = startingPrefix;
 	string lastWords[order];
+	istringstream iss(startingPrefix);
+	string word;
+
+	for (int i = 0; i < order; i++)
+	{
+		iss >> word;
+		lastWords[i] = word;
+	}
 
 	for (int i = 0; i < numWords; i++)
 	{
@@ -116,16 +125,14 @@ string generateText(const string prefixes[], const string suffixes[], int chainS
 		{
 			break;
 		}
+
 		resultString += " " + word;
 
-		// currentPrefix = word;
 		for (int i = 0; i < (order - 1); i++)
 		{
 			lastWords[i] = lastWords[i + 1];
 		}
 		lastWords[order - 1] = word;
-
-		cout << "HERE " << joinWords(lastWords, 0, order) << endl;
 
 		currentPrefix = joinWords(lastWords, 0, order);
 	}
