@@ -128,9 +128,9 @@ string generateText(const string prefixes[], const string suffixes[], int chainS
 
 		resultString += " " + word;
 
-		for (int i = 0; i < (order - 1); i++)
+		for (int j = 0; j < (order - 1); j++)
 		{
-			lastWords[i] = lastWords[i + 1];
+			lastWords[j] = lastWords[j + 1];
 		}
 		lastWords[order - 1] = word;
 
