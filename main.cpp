@@ -103,7 +103,7 @@ int main()
 	cin >> order;
 	while (order != 1 && order != 2 && order != 3)
 	{
-		cout << "Order but be 1, 2, or 3: " << endl;
+		cout << "Order must be 1, 2, or 3: " << endl;
 		cin >> order;
 	}
 
@@ -117,6 +117,20 @@ int main()
 	}
 
 	int chainSize = buildMarkovChain(words, arraySize, order, prefixes, suffixes, arraySize);
+	int attempts = 0;
+	int allowedAttempts = 10;
+
+	while (chainSize == 0 && attempts < allowedAttempts)
+	{
+		chainSize = buildMarkovChain(words, arraySize, order, prefixes, suffixes, arraySize);
+		allowedAttempts++;
+	}
+
+	if (attempts == allowedAttempts)
+	{
+		cerr << "Error: Combination of inputs cause issues generating the Markov Chain. Please try a different combination of input text file / order / number of words to generate" << endl;
+		return 0;
+	}
 
 	string result = generateText(prefixes, suffixes, chainSize, order, numWords);
 

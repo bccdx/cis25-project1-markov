@@ -118,7 +118,7 @@ string generateText(const string prefixes[], const string suffixes[], int chainS
 		lastWords[i] = word;
 	}
 
-	for (int i = 0; i < numWords; i++)
+	for (int i = 0; i < numWords - order; i++)
 	{
 		string word = getRandomSuffix(prefixes, suffixes, chainSize, currentPrefix);
 		if (word == "")
